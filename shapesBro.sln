@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32721.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shapesBro", "shapesBro\shapesBro.csproj", "{125974BB-F9C3-4FCB-8290-E27F6B62F777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGraphicsEngine", "shapesBro\ConsoleGraphicsEngine.csproj", "{125974BB-F9C3-4FCB-8290-E27F6B62F777}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,5 @@
 ﻿
 
-using cgLib.Output;
 /// <summary>
 /// Console Geometry Libray
 /// </summary>
@@ -20,6 +19,10 @@ namespace cgLib
         public static Vector2 Addition(Vector2 a, Vector2 b)
         {
             return new Vector2(a.x + b.x, a.y + b.y);
+        }
+        public static Vector2 Fast(int x, int y)
+        {
+            return new Vector2(x, y);
         }
         public override string ToString()
         {
@@ -129,123 +132,22 @@ namespace cgLib
                 Vector2 s = new Vector2(size.x, size.y);
                 return s;
             }
-            public void GetBounds()
+            public void Translate(int x, int y)
             {
-                List<Vector2> bounds = new List<Vector2>();
-                bounds = positions;
+                position = Vector2.Addition(position, Vector2.Fast(x, y));
+            }
+            public void Scale(int x, int y)
+            {
+                size = new Vector2(x, y);
+            }
+            public void ReSize(int x, int y)
+            {
+                size = Vector2.Addition(GetSize(), new Vector2(x, y));
             }
         }
+        
 
-        public class Triangle
-        {
-            public ConsoleColor color;
-            public Vector2 position = new Vector2();
-            public Vector2 size = new Vector2();
-            public bool isActive = true;
-            public char body = '█';
-            List<Vector2> positions = new List<Vector2>();
-
-            public Triangle(Vector2 position, Vector2 size, ConsoleColor color)
-            {
-                this.position = position;
-                this.size = size;
-                this.color = color;
-            }
-
-            public void Draw()
-            {
-                isActive = true;
-                if (isActive)
-                {
-                    positions.Clear();
-                    Console.ForegroundColor = color;
-
-                    
-                    Console.SetCursorPosition(position.x + size.x/2, position.y - size.y);
-                    Console.WriteLine(body);
-
-                    for (int h = 0; h < size.x; h++)
-                    {
-                        for (int i = 0; i < size.x / 2; i++)
-                        {
-                            Console.SetCursorPosition(position.x + size.x / 2 + i + h, position.y - size.y + i);
-                            Console.WriteLine(body);
-                            Console.SetCursorPosition(position.x + size.x / 2 - i + h, position.y - size.y + i);
-                            Console.WriteLine(body);
-                        }
-                    }
-                    
-
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
-            }
-
-            public void Update()
-            {
-                if (isActive)
-                {
-                    for (int i = 0; i < positions.Count; i++)
-                    {
-                        Console.SetCursorPosition(positions[i].x, positions[i].y);
-                        if (positions[i].x < 0 || positions[i].x > Console.BufferWidth || positions[i].y > Console.BufferHeight || positions[i].y < 0)
-                            goto end;
-                        Console.WriteLine(' ');
-                    end:;
-                    }
-                }
-            }
-            public void UpdateAndDraw()
-            {
-                Update();
-                Draw();
-            }
-            public void Destroy()
-            {
-                foreach (var pos in positions)
-                {
-                    Console.SetCursorPosition(pos.x, pos.y);
-                    Console.WriteLine(' ');
-                }
-                isActive = false;
-            }
-            public Vector2 GetPosition()
-            {
-                Vector2 pos = new Vector2(position.x, position.y);
-                return pos;
-            }
-            public Vector2 GetSize()
-            {
-                Vector2 s = new Vector2(size.x, size.y);
-                return s;
-            }
-            public void GetBounds()
-            {
-                List<Vector2> bounds = new List<Vector2>();
-                bounds = positions;
-            }
-        }
     }
-
-    namespace Output
-    {
-        /// <summary>
-        /// Display some text in the first console line.
-        /// </summary>
-        public class DirectOutput
-        {
-            public void Put(string op)
-            {
-                Console.SetCursorPosition(0, 0);
-                Console.WriteLine(op + "                                                                                                    ");
-            }
-            public void Put(int op)
-            {
-                Console.SetCursorPosition(0, 0);
-                Console.WriteLine(op + "                                                                                                    ");
-            }
-        }
-    }
-
     namespace KeyBoardInput
     {
         /// <summary>
@@ -259,9 +161,16 @@ namespace cgLib
             /// <returns></returns>
             public static ConsoleKey GetKey()
             {
-                ConsoleKey key = Console.ReadKey(true).Key;
-                return key;
-            }            
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKey key = Console.ReadKey(true).Key;
+                    return key;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
         /// <summary>
         /// All the Keys avaible.
@@ -295,12 +204,21 @@ namespace cgLib
                 X = ConsoleKey.X,
                 Y = ConsoleKey.Y,
                 Z = ConsoleKey.Z;
-                
+
 
 
         }
     }
 
-    
-
+    public static class Window
+    {
+        public static void Init()
+        {
+            Console.CursorVisible = false;
+        }
+        public static void Stop()
+        {
+            Console.ReadKey();
+        }
+    }
 }
